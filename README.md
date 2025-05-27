@@ -15,6 +15,7 @@ Rockchip boards based on RV1103/RV1106 using using ported rockchip-linux sources
 
 * Luckfox Pico Mini A:
   <https://www.luckfox.com/Luckfox-Pico-Mini-A>
+  ![plot](img/luckfox_pico_mini_a.png?raw=true"Title")
 
 ## Dependencies
 
