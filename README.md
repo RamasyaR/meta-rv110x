@@ -9,7 +9,7 @@ Yocto BSP layer for Rockchip boards based on RV1103/RV1106.
 ![plot](img/fastfetch.png?raw=true"Title")
 
 The purpose of this layer is to provide OpenEmbedded BSP support for
-Rockchip boards based on RV1103/RV1106 using using ported rockchip-linux sources.
+Rockchip boards based on RV1103/RV1106 using ported rockchip-linux sources.
 
 ## Supported boards
 
