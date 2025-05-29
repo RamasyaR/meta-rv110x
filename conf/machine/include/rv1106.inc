@@ -7,8 +7,6 @@ require conf/machine/include/rockchip-defaults.inc
 require conf/machine/include/arm/armv7a/tune-cortexa7.inc
 require conf/machine/include/rockchip-wic.inc
 
-TCLIBC = "musl"
-
 SERIAL_CONSOLES = "115200;ttyS2"
 
 KBUILD_DEFCONFIG = "multi_v7_defconfig"
