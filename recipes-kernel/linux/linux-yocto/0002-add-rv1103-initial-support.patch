@@ -60,10 +60,10 @@ index 000000000..935cd2a43
 +};
 diff --git a/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini.dts b/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini.dts
 new file mode 100755
-index 000000000..6274ab3d1
+index 000000000..faf8b6ffa
 --- /dev/null
 +++ b/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini.dts
-@@ -0,0 +1,123 @@
+@@ -0,0 +1,104 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2023 Luckfox Electronics Co., Ltd.
@@ -76,10 +76,6 @@ index 000000000..6274ab3d1
 +/ {
 +	model = "Luckfox Pico Mini";
 +	compatible = "rockchip,rv1103g-38x38-ipc-v10", "rockchip,rv1103";
-+
-+	chosen {
-+		bootargs = "earlycon=uart8250,mmio32,0xff4c0000 console=ttyFIQ0 root=/dev/mmcblk1p7 rootwait";
-+	};
 +
 +	vcc_1v8: vcc-1v8 {
 +		compatible = "regulator-fixed";
@@ -151,21 +147,6 @@ index 000000000..6274ab3d1
 +	};
 +};
 +
-+&spi0 {
-+	status = "okay";
-+
-+	pinctrl-0 = <&spi0m0_cs0 &spi0m0_pins>;
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+  	spidev@0 {
-+    		compatible = "rockchip,spidev";
-+		spi-max-frequency = <50000000>;
-+		reg = <0>;
-+	};
-+
-+};
-+
 +&saradc {
 +	status = "okay";
 +	vref-supply = <&vcc_1v8>;
@@ -189,10 +170,10 @@ index 000000000..6274ab3d1
 +};
 diff --git a/arch/arm/boot/dts/rockchip/rv1106-pinctrl.dtsi b/arch/arm/boot/dts/rockchip/rv1106-pinctrl.dtsi
 new file mode 100644
-index 000000000..289634f5a
+index 000000000..5501eb9d3
 --- /dev/null
 +++ b/arch/arm/boot/dts/rockchip/rv1106-pinctrl.dtsi
-@@ -0,0 +1,1398 @@
+@@ -0,0 +1,1393 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2022 Rockchip Electronics Co., Ltd.
@@ -304,6 +285,8 @@ index 000000000..289634f5a
 +			rockchip,pins =
 +				/* fspi_clk */
 +				<4 RK_PB1 2 &pcfg_pull_up_drv_level_2>,
++				/* fspi_cs0n */
++				<4 RK_PB0 2 &pcfg_pull_up>,
 +				/* fspi_d0 */
 +				<4 RK_PA4 2 &pcfg_pull_none>,
 +				/* fspi_d1 */
@@ -312,13 +295,6 @@ index 000000000..289634f5a
 +				<4 RK_PA2 2 &pcfg_pull_none>,
 +				/* fspi_d3 */
 +				<4 RK_PA6 2 &pcfg_pull_none>;
-+		};
-+
-+		/omit-if-no-ref/
-+		fspi_cs0: fspi-cs0 {
-+			rockchip,pins =
-+				/* fspi_cs0n */
-+				<4 RK_PB0 2 &pcfg_pull_up>;
 +		};
 +	};
 +
@@ -1593,10 +1569,10 @@ index 000000000..289634f5a
 +};
 diff --git a/arch/arm/boot/dts/rockchip/rv1106.dtsi b/arch/arm/boot/dts/rockchip/rv1106.dtsi
 new file mode 100644
-index 000000000..85a4a4645
+index 000000000..06c50d6c3
 --- /dev/null
 +++ b/arch/arm/boot/dts/rockchip/rv1106.dtsi
-@@ -0,0 +1,854 @@
+@@ -0,0 +1,856 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2022 Rockchip Electronics Co., Ltd.
@@ -2355,6 +2331,8 @@ index 000000000..85a4a4645
 +		interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
 +		clocks = <&cru SCLK_SFC>, <&cru HCLK_SFC>;
 +		clock-names = "clk_sfc", "hclk_sfc";
++		pinctrl-0 = <&fspi_pins>;
++		pinctrl-names = "default";
 +		#address-cells = <1>;
 +		#size-cells = <0>;
 +		status = "disabled";
