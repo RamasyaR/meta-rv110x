@@ -60,10 +60,10 @@ index 000000000..935cd2a43
 +};
 diff --git a/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini.dts b/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini.dts
 new file mode 100755
-index 000000000..5410282b7
+index 000000000..faf8b6ffa
 --- /dev/null
 +++ b/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini.dts
-@@ -0,0 +1,108 @@
+@@ -0,0 +1,104 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2023 Luckfox Electronics Co., Ltd.
@@ -120,10 +120,6 @@ index 000000000..5410282b7
 +
 +&cpu0 {
 +	cpu-supply = <&vdd_arm>;
-+};
-+
-+&vop {
-+	status = "okay";
 +};
 +
 +&sdmmc {
@@ -1573,10 +1569,10 @@ index 000000000..5501eb9d3
 +};
 diff --git a/arch/arm/boot/dts/rockchip/rv1106.dtsi b/arch/arm/boot/dts/rockchip/rv1106.dtsi
 new file mode 100644
-index 000000000..f6ddc9d66
+index 000000000..22b690f9d
 --- /dev/null
 +++ b/arch/arm/boot/dts/rockchip/rv1106.dtsi
-@@ -0,0 +1,858 @@
+@@ -0,0 +1,859 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2022 Rockchip Electronics Co., Ltd.
@@ -1737,6 +1733,7 @@ index 000000000..f6ddc9d66
 +	display_subsystem {
 +		compatible = "rockchip,display-subsystem";
 +		ports = <&vop_out>;
++		status = "disabled";
 +	};
 +
 +	xin24m: oscillator {
