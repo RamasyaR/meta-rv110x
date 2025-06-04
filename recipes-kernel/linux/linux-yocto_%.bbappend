@@ -1,6 +1,7 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 
-COMPATIBLE_MACHINE:luckfox-pico-mini = "luckfox-pico-mini"
+COMPATIBLE_MACHINE:luckfox-pico-mini-a = "luckfox-pico-mini-a"
+COMPATIBLE_MACHINE:luckfox-pico-mini-b = "luckfox-pico-mini-b"
 
 SRC_URI += " \
     file://0001-mmc-set-initial-signal-voltage-on-power-off.patch \

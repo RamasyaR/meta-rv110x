@@ -11,59 +11,12 @@ index ab4cd9aab..b61125b5e 100644
  	rv1108-elgin-r1.dtb \
  	rv1108-evb.dtb \
  	rv1109-sonoff-ihost.dtb \
-diff --git a/arch/arm/boot/dts/rockchip/rv1103.dtsi b/arch/arm/boot/dts/rockchip/rv1103.dtsi
-new file mode 100644
-index 000000000..935cd2a43
---- /dev/null
-+++ b/arch/arm/boot/dts/rockchip/rv1103.dtsi
-@@ -0,0 +1,41 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2022 Rockchip Electronics Co., Ltd.
-+ */
-+
-+#include "rv1106.dtsi"
-+
-+/ {
-+	compatible = "rockchip,rv1103";
-+
-+	aliases {
-+		/delete-property/ gpio2;
-+	};
-+};
-+
-+/delete-node/ &gpio2;
-+
-+&cpu0_opp_table {
-+	/delete-node/ opp-1200000000;
-+	/delete-node/ opp-1296000000;
-+	/delete-node/ opp-1416000000;
-+	/delete-node/ opp-1512000000;
-+	/delete-node/ opp-1608000000;
-+};
-+
-+&cru {
-+	assigned-clocks =
-+		<&cru PLL_GPLL>, <&cru PLL_CPLL>,
-+		<&cru ARMCLK>,
-+		<&cru ACLK_PERI_ROOT>, <&cru HCLK_PERI_ROOT>,
-+		<&cru PCLK_PERI_ROOT>, <&cru ACLK_BUS_ROOT>,
-+		<&cru PCLK_TOP_ROOT>, <&cru PCLK_PMU_ROOT>,
-+		<&cru HCLK_PMU_ROOT>, <&cru CLK_339M_SRC>;
-+	assigned-clock-rates =
-+		<1188000000>, <1000000000>,
-+		<1104000000>,
-+		<400000000>, <200000000>,
-+		<100000000>, <300000000>,
-+		<100000000>, <100000000>,
-+		<200000000>, <264000000>;
-+};
-diff --git a/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini.dts b/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini.dts
+diff --git a/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini-a.dts b/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini-a.dts
 new file mode 100755
-index 000000000..faf8b6ffa
+index 000000000..ef47bfa32
 --- /dev/null
-+++ b/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini.dts
-@@ -0,0 +1,104 @@
++++ b/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini-a.dts
+@@ -0,0 +1,13 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2023 Luckfox Electronics Co., Ltd.
@@ -71,12 +24,57 @@ index 000000000..faf8b6ffa
 +
 +/dts-v1/;
 +
-+#include "rv1103.dtsi"
++#include "rv1103g-luckfox-pico-mini.dtsi"
 +
 +/ {
-+	model = "Luckfox Pico Mini";
-+	compatible = "rockchip,rv1103g-38x38-ipc-v10", "rockchip,rv1103";
++	model = "Luckfox Pico Mini A";
++	compatible = "rockchip,rv1103g-luckfox-pico-mini-a", "rockchip,rv1103";	
++};
+diff --git a/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini-b.dts b/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini-b.dts
+new file mode 100755
+index 000000000..6139d103a
+--- /dev/null
++++ b/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini-b.dts
+@@ -0,0 +1,25 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (c) 2023 Luckfox Electronics Co., Ltd.
++ */
 +
++/dts-v1/;
++
++#include "rv1103g-luckfox-pico-mini.dtsi"
++
++/ {
++	model = "Luckfox Pico Mini B";
++	compatible = "rockchip,rv1103g-luckfox-pico-mini-b", "rockchip,rv1103";	
++};
++
++&sfc {
++	status = "okay";
++
++	flash@0 {
++		compatible = "spi-nand";
++		reg = <0>;
++		spi-max-frequency = <75000000>;
++		spi-rx-bus-width = <4>;
++		spi-tx-bus-width = <1>;
++	};
++};
+diff --git a/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini.dtsi b/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini.dtsi
+new file mode 100644
+index 000000000..7154c1eb9
+--- /dev/null
++++ b/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini.dtsi
+@@ -0,0 +1,87 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (c) 2023 Luckfox Electronics Co., Ltd.
++ */
++
++#include "rv1103g.dtsi"
++
++/ {
 +	vcc_1v8: vcc-1v8 {
 +		compatible = "regulator-fixed";
 +		regulator-name = "vcc_1v8";
@@ -135,18 +133,6 @@ index 000000000..faf8b6ffa
 +	status = "okay";
 +};
 +
-+&sfc {
-+	status = "okay";
-+
-+	flash@0 {
-+		compatible = "spi-nand";
-+		reg = <0>;
-+		spi-max-frequency = <75000000>;
-+		spi-rx-bus-width = <4>;
-+		spi-tx-bus-width = <1>;
-+	};
-+};
-+
 +&saradc {
 +	status = "okay";
 +	vref-supply = <&vcc_1v8>;
@@ -167,6 +153,53 @@ index 000000000..faf8b6ffa
 +
 +&uart4 {
 +	pinctrl-0 = <&uart4m1_xfer>;
++};
+diff --git a/arch/arm/boot/dts/rockchip/rv1103g.dtsi b/arch/arm/boot/dts/rockchip/rv1103g.dtsi
+new file mode 100644
+index 000000000..935cd2a43
+--- /dev/null
++++ b/arch/arm/boot/dts/rockchip/rv1103g.dtsi
+@@ -0,0 +1,41 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (c) 2022 Rockchip Electronics Co., Ltd.
++ */
++
++#include "rv1106.dtsi"
++
++/ {
++	compatible = "rockchip,rv1103";
++
++	aliases {
++		/delete-property/ gpio2;
++	};
++};
++
++/delete-node/ &gpio2;
++
++&cpu0_opp_table {
++	/delete-node/ opp-1200000000;
++	/delete-node/ opp-1296000000;
++	/delete-node/ opp-1416000000;
++	/delete-node/ opp-1512000000;
++	/delete-node/ opp-1608000000;
++};
++
++&cru {
++	assigned-clocks =
++		<&cru PLL_GPLL>, <&cru PLL_CPLL>,
++		<&cru ARMCLK>,
++		<&cru ACLK_PERI_ROOT>, <&cru HCLK_PERI_ROOT>,
++		<&cru PCLK_PERI_ROOT>, <&cru ACLK_BUS_ROOT>,
++		<&cru PCLK_TOP_ROOT>, <&cru PCLK_PMU_ROOT>,
++		<&cru HCLK_PMU_ROOT>, <&cru CLK_339M_SRC>;
++	assigned-clock-rates =
++		<1188000000>, <1000000000>,
++		<1104000000>,
++		<400000000>, <200000000>,
++		<100000000>, <300000000>,
++		<100000000>, <100000000>,
++		<200000000>, <264000000>;
 +};
 diff --git a/arch/arm/boot/dts/rockchip/rv1106-pinctrl.dtsi b/arch/arm/boot/dts/rockchip/rv1106-pinctrl.dtsi
 new file mode 100644
