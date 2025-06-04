@@ -1,4 +1,4 @@
-Upstream-Status: Submitted [by someone else]
+Upstream-Status: Inappropriate [embedded specific]
 
 diff --git a/arch/arm/boot/dts/rockchip/Makefile b/arch/arm/boot/dts/rockchip/Makefile
 index ab4cd9aab..b61125b5e 100644
@@ -60,10 +60,10 @@ index 000000000..935cd2a43
 +};
 diff --git a/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini.dts b/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini.dts
 new file mode 100755
-index 000000000..faf8b6ffa
+index 000000000..5410282b7
 --- /dev/null
 +++ b/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini.dts
-@@ -0,0 +1,104 @@
+@@ -0,0 +1,108 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2023 Luckfox Electronics Co., Ltd.
@@ -120,6 +120,10 @@ index 000000000..faf8b6ffa
 +
 +&cpu0 {
 +	cpu-supply = <&vdd_arm>;
++};
++
++&vop {
++	status = "okay";
 +};
 +
 +&sdmmc {
@@ -1569,10 +1573,10 @@ index 000000000..5501eb9d3
 +};
 diff --git a/arch/arm/boot/dts/rockchip/rv1106.dtsi b/arch/arm/boot/dts/rockchip/rv1106.dtsi
 new file mode 100644
-index 000000000..06c50d6c3
+index 000000000..f6ddc9d66
 --- /dev/null
 +++ b/arch/arm/boot/dts/rockchip/rv1106.dtsi
-@@ -0,0 +1,856 @@
+@@ -0,0 +1,858 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2022 Rockchip Electronics Co., Ltd.
@@ -2277,6 +2281,8 @@ index 000000000..06c50d6c3
 +		clocks = <&cru ACLK_VOP>, <&cru DCLK_VOP>, <&cru HCLK_VOP>;
 +		clock-names = "aclk_vop", "dclk_vop", "hclk_vop";
 +		status = "disabled";
++		resets = <&cru SRST_A_VOP>, <&cru SRST_H_VOP>, <&cru SRST_D_VOP>;
++		reset-names = "axi", "ahb", "dclk";
 +
 +		vop_out: port {
 +			#address-cells = <1>;
