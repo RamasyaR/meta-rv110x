@@ -63,10 +63,10 @@ index 000000000..6139d103a
 +};
 diff --git a/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini.dtsi b/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini.dtsi
 new file mode 100644
-index 000000000..400fbd456
+index 000000000..1c3ffd534
 --- /dev/null
 +++ b/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini.dtsi
-@@ -0,0 +1,98 @@
+@@ -0,0 +1,102 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2023 Luckfox Electronics Co., Ltd.
@@ -77,6 +77,10 @@ index 000000000..400fbd456
 +/ {
 +	chosen {
 +		stdout-path = "serial2:115200n8";
++	};
++
++	aliases {
++		ethernet0 = &gmac;
 +	};
 +
 +	vcc_1v8: vcc-1v8 {
