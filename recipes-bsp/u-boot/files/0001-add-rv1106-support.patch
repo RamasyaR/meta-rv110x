@@ -3038,10 +3038,10 @@ index 00000000..eca79d51
 +
 +#endif
 diff --git a/arch/arm/mach-rockchip/Kconfig b/arch/arm/mach-rockchip/Kconfig
-index 269c219a..3ae5bc5c 100644
+index 269c219a..77854611 100644
 --- a/arch/arm/mach-rockchip/Kconfig
 +++ b/arch/arm/mach-rockchip/Kconfig
-@@ -375,6 +375,36 @@ config ROCKCHIP_RK3588
+@@ -375,6 +375,38 @@ config ROCKCHIP_RK3588
  	  SD3.0/MMC4.5, USB OTG 3.0, Type-C, USB 2.0, PCIe 3.0, SATA 3, Ethernet,
  	  SDIO3.0 I2C, UART, SPI, GPIO and PWM.
  
@@ -3058,9 +3058,11 @@ index 269c219a..3ae5bc5c 100644
 +	select REGMAP
 +	select SYSCON
 +	select DM_RESET
-+	imply ROCKCHIP_COMMON_BOARD
 +	imply DM_RNG
 +	imply MISC
++	imply MISC_INIT_R
++	imply ROCKCHIP_COMMON_BOARD
++	imply ROCKCHIP_OTP
 +	imply SPL_CLK
 +	imply SPL_LIBCOMMON_SUPPORT
 +	imply SPL_LIBGENERIC_SUPPORT
@@ -3078,7 +3080,7 @@ index 269c219a..3ae5bc5c 100644
  config ROCKCHIP_RV1108
  	bool "Support Rockchip RV1108"
  	select CPU_V7A
-@@ -490,7 +520,7 @@ config TPL_ROCKCHIP_COMMON_BOARD
+@@ -490,7 +522,7 @@ config TPL_ROCKCHIP_COMMON_BOARD
  
  config ROCKCHIP_EXTERNAL_TPL
  	bool "Use external TPL binary"
@@ -3087,7 +3089,7 @@ index 269c219a..3ae5bc5c 100644
  	help
  	  Some Rockchip SoCs require an external TPL to initialize DRAM.
  	  Enable this option and build with ROCKCHIP_TPL=/path/to/ddr.bin to
-@@ -628,6 +658,7 @@ source "arch/arm/mach-rockchip/rk3368/Kconfig"
+@@ -628,6 +660,7 @@ source "arch/arm/mach-rockchip/rk3368/Kconfig"
  source "arch/arm/mach-rockchip/rk3399/Kconfig"
  source "arch/arm/mach-rockchip/rk3568/Kconfig"
  source "arch/arm/mach-rockchip/rk3588/Kconfig"
@@ -3555,10 +3557,10 @@ index 00000000..284635e4
 +#endif
 diff --git a/configs/evb-rv1106_defconfig b/configs/evb-rv1106_defconfig
 new file mode 100644
-index 00000000..59ecfd6c
+index 00000000..46e2bd70
 --- /dev/null
 +++ b/configs/evb-rv1106_defconfig
-@@ -0,0 +1,57 @@
+@@ -0,0 +1,56 @@
 +CONFIG_ARM=y
 +CONFIG_COUNTER_FREQUENCY=24000000
 +CONFIG_SYS_ARCH_TIMER=y
@@ -3603,7 +3605,6 @@ index 00000000..59ecfd6c
 +CONFIG_OF_SPL_REMOVE_PROPS="clock-names interrupt-parent assigned-clocks assigned-clock-rates assigned-clock-parents"
 +CONFIG_SYS_RELOC_GD_ENV_ADDR=y
 +CONFIG_ROCKCHIP_GPIO=y
-+CONFIG_ROCKCHIP_OTP=y
 +CONFIG_MMC_DW=y
 +CONFIG_MMC_DW_ROCKCHIP=y
 +CONFIG_DM_ETH_PHY=y
