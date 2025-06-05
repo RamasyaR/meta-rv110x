@@ -1,23 +1,31 @@
-
-
 # meta-rv110x
 
 Yocto BSP layer for Rockchip boards based on RV1103/RV1106.
 
-## Description
+## 📋 Description
 
-![plot](img/fastfetch.png?raw=true"Title")
+![plot](img/fastfetch.png)
 
 The purpose of this layer is to provide OpenEmbedded BSP support for
 Rockchip boards based on RV1103/RV1106 using ported rockchip-linux sources.
 
-## Supported boards
+## 🛹 Supported boards
+| Name                | Link                                          | View     |
+:--------------------:|:---------------------------------------------:|:-----------:
+| Luckfox Pico Mini A | <https://www.luckfox.com/Luckfox-Pico-Mini-A> | <img src="img/luckfox_pico_mini_a.png" width="40%">|
 
-* Luckfox Pico Mini A:
-  <https://www.luckfox.com/Luckfox-Pico-Mini-A>
-  ![plot](img/luckfox_pico_mini_a.png?raw=true"Title")
+## 🔧 Development status
+- [x] 🚀 Initial support in u-boot
+- [x] ✈️ Initial support in linux kernel
+- [x] 🌐 Ethernet
+- [ ] 📼 Boot from NAND
+- [ ] 🔌 USB host support
+- [ ] 📷 Camera serial interface
+- [ ] 📥 RAUC support for SD card
+- [ ] 📥 RAUC support for NAND
+- [ ] 📺 Support for some display controllers
 
-## Dependencies
+## 🔗 Dependencies
 
 This layer depends on:
 
@@ -29,15 +37,10 @@ This layer depends on:
   * branch: walnascar
   * revision: HEAD
 
-## Limitations
-
-* There is only basic support without npu, csi, crypto, mpp and unfortunately no ethernet. I am going to add ethernet support soon.
-* Only SD cards are supported.
-
-## Contributing
+## 🙏 Contributing
 
 If you have a desire to help with the development of this layer, or perhaps you would like to help develop patches with soc support for u-boot or linux kernel, then open discussions or pull requests, I would be very glad of any help.
 
-## Maintainers
+## 🦾 Maintainers
 
 * Raman Rakavets `<radikot88@gmail.com>`
