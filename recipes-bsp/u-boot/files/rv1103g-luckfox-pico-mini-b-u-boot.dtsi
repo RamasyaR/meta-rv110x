@@ -1,0 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0+
+
+#include "rv1103g-u-boot.dtsi"
+
+/ {
+	chosen {
+		u-boot,spl-boot-order = &sdmmc, &spi_nand;
+	};
+};

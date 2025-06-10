@@ -1,0 +1,86 @@
+// SPDX-License-Identifier: GPL-2.0+
+
+#include "rockchip-u-boot.dtsi"
+
+/ {
+	chosen {
+		u-boot,spl-boot-order = "same-as-spl", &sdmmc, &emmc;
+	};
+
+	dmc {
+		compatible = "rockchip,rv1103-dmc", "rockchip,rv1106-dmc";
+		bootph-all;
+	};
+};
+
+&grf {
+	bootph-all;
+};
+
+&pmuioc {
+	bootph-pre-ram;
+};
+
+&cru {
+	bootph-all;
+};
+
+&saradc {
+	bootph-all;
+};
+
+&u2phy {
+	bootph-all;
+};
+
+&u2phy_otg {
+	bootph-all;
+};
+
+&uart2 {
+	bootph-pre-ram;
+};
+
+&ioc {
+	bootph-pre-ram;
+};
+
+&gmac {
+	bootph-pre-ram;
+};
+
+&sdmmc {
+	bootph-pre-ram;
+};
+
+&sfc {
+	bootph-pre-ram;
+};
+
+&usbdrd {
+	bootph-all;
+};
+
+&usbdrd_dwc3 {
+	bootph-all;
+};
+
+&grf_cru {
+	bootph-pre-ram;
+};
+
+&gpio0 {
+	bootph-pre-ram;
+};
+
+&gpio1 {
+	bootph-all;
+};
+
+&gpio3 {
+	bootph-pre-ram;
+};
+
+&gpio4 {
+	bootph-all;
+};

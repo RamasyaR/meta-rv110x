@@ -4,7 +4,7 @@ Yocto BSP layer for Rockchip boards based on RV1103/RV1106.
 
 ## 📋 Description
 
-![plot](img/fastfetch.png)
+![plot](files/img/fastfetch.png)
 
 The purpose of this layer is to provide OpenEmbedded BSP support for
 Rockchip boards based on RV1103/RV1106 using ported rockchip-linux sources.
@@ -12,7 +12,7 @@ Rockchip boards based on RV1103/RV1106 using ported rockchip-linux sources.
 ## 🛹 Supported boards
 | Name                | Link                                          | View     |
 :--------------------:|:---------------------------------------------:|:-----------:
-| Luckfox Pico Mini A | <https://www.luckfox.com/Luckfox-Pico-Mini-A> | <img src="img/luckfox_pico_mini_a.png" width="40%">|
+| Luckfox Pico Mini A | <https://www.luckfox.com/Luckfox-Pico-Mini-A> | <img src="files/img/luckfox_pico_mini_a.png" width="40%">|
 
 ## 🔧 Development status
 - [x] 🚀 Initial support in u-boot
