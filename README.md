@@ -19,7 +19,7 @@ Rockchip boards based on RV1103/RV1106 using ported rockchip-linux sources.
 - [x] ✈️ Initial support in linux kernel
 - [x] 🌐 Ethernet with static MAC
 - [ ] 📼 Boot from NAND
-- [ ] 🔌 USB host support
+- [x] 🔌 USB host and gadget support
 - [ ] 📷 Camera serial interface
 - [ ] 📥 RAUC support for SD card
 - [ ] 📥 RAUC support for NAND

@@ -63,10 +63,10 @@ index 000000000..6139d103a
 +};
 diff --git a/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini.dtsi b/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini.dtsi
 new file mode 100644
-index 000000000..1c3ffd534
+index 000000000..d101a54ce
 --- /dev/null
 +++ b/arch/arm/boot/dts/rockchip/rv1103g-luckfox-pico-mini.dtsi
-@@ -0,0 +1,102 @@
+@@ -0,0 +1,119 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2023 Luckfox Electronics Co., Ltd.
@@ -169,12 +169,29 @@ index 000000000..1c3ffd534
 +&uart4 {
 +	pinctrl-0 = <&uart4m1_xfer>;
 +};
++
++&u2phy {
++	status = "okay";
++};
++
++&u2phy_otg {
++	status = "okay";
++};
++
++&usbdrd {
++	status = "okay";
++};
++
++&usbdrd_dwc3 {
++	extcon = <&u2phy>;
++	status = "okay";
++};
 diff --git a/arch/arm/boot/dts/rockchip/rv1103g.dtsi b/arch/arm/boot/dts/rockchip/rv1103g.dtsi
 new file mode 100644
-index 000000000..935cd2a43
+index 000000000..cf99fd640
 --- /dev/null
 +++ b/arch/arm/boot/dts/rockchip/rv1103g.dtsi
-@@ -0,0 +1,41 @@
+@@ -0,0 +1,45 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2022 Rockchip Electronics Co., Ltd.
@@ -215,6 +232,10 @@ index 000000000..935cd2a43
 +		<100000000>, <300000000>,
 +		<100000000>, <100000000>,
 +		<200000000>, <264000000>;
++};
++
++&u2phy {
++	compatible = "rockchip,rv1103-usb2phy";
 +};
 diff --git a/arch/arm/boot/dts/rockchip/rv1106-pinctrl.dtsi b/arch/arm/boot/dts/rockchip/rv1106-pinctrl.dtsi
 new file mode 100644
@@ -1617,10 +1638,10 @@ index 000000000..5501eb9d3
 +};
 diff --git a/arch/arm/boot/dts/rockchip/rv1106.dtsi b/arch/arm/boot/dts/rockchip/rv1106.dtsi
 new file mode 100644
-index 000000000..c1a638f7b
+index 000000000..f9932594c
 --- /dev/null
 +++ b/arch/arm/boot/dts/rockchip/rv1106.dtsi
-@@ -0,0 +1,928 @@
+@@ -0,0 +1,984 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2022 Rockchip Electronics Co., Ltd.
@@ -2050,6 +2071,29 @@ index 000000000..c1a638f7b
 +		};
 +	};
 +
++	u2phy: usb2-phy@ff3e0000 {
++		compatible = "rockchip,rv1106-usb2phy";
++		reg = <0xff3e0000 0x8000>;
++		rockchip,usbgrf = <&grf>;
++		clocks = <&cru CLK_REF_USBPHY>, <&cru PCLK_USBPHY>;
++		clock-names = "phyclk", "pclk";
++		resets = <&cru SRST_USBPHY_POR>, <&cru SRST_P_USBPHY>;
++		reset-names = "u2phy", "u2phy-apb";
++		#clock-cells = <0>;
++		status = "disabled";
++
++		u2phy_otg: otg-port {
++			#phy-cells = <0>;
++			interrupts = <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 59 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 60 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 61 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "otg-bvalid", "otg-id",
++					  "linestate", "disconnect";
++			status = "disabled";
++		};
++	};
++
 +	dmac: dma-controller@ff420000 {
 +		compatible = "arm,pl330", "arm,primecell";
 +		reg = <0xff420000 0x4000>;
@@ -2471,6 +2515,39 @@ index 000000000..c1a638f7b
 +		rockchip,clk-trcm = <1>;
 +		#sound-dai-cells = <0>;
 +		status = "disabled";
++	};
++
++	usbdrd: usbdrd {
++		compatible = "rockchip,rv1106-dwc3", "rockchip,rk3399-dwc3";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
++		clocks = <&cru CLK_REF_USBOTG>, <&cru CLK_UTMI_USBOTG>,
++			 <&cru ACLK_USBOTG>;
++		clock-names = "ref", "utmi", "bus";
++		status = "disabled";
++
++		usbdrd_dwc3: usb@ffb00000 {
++			compatible = "snps,dwc3";
++			reg = <0xffb00000 0x100000>;
++			interrupts = <GIC_SPI 54 IRQ_TYPE_LEVEL_HIGH>;
++			resets = <&cru SRST_A_USBOTG>;
++			reset-names = "usb3-otg";
++			dr_mode = "otg";
++			maximum-speed = "high-speed";
++			phys = <&u2phy_otg>;
++			phy-names = "usb2-phy";
++			phy_type = "utmi_wide";
++			snps,dis_enblslpm_quirk;
++			snps,dis-u2-freeclk-exists-quirk;
++			snps,dis_u2_susphy_quirk;
++			snps,dis-del-phy-power-chg-quirk;
++			snps,dis-tx-ipgap-linecheck-quirk;
++			snps,usb2-gadget-lpm-disable;
++			snps,usb2-lpm-disable;
++			snps,parkmode-disable-hs-quirk;
++			status = "disabled";
++		};
 +	};
 +
 +	pinctrl: pinctrl {
@@ -4334,6 +4411,129 @@ index ebc3f0b24..d17048a2c 100644
  	{ /* sentinel */ },
  };
  MODULE_DEVICE_TABLE(of, rockchip_otp_match);
+diff --git a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+index 4f71373ae..0b9db4d33 100644
+--- a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
++++ b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+@@ -1544,6 +1544,21 @@ static int rk3588_usb2phy_tuning(struct rockchip_usb2phy *rphy)
+ 	return ret;
+ }
+ 
++static int rv1103_usb2phy_tuning(struct rockchip_usb2phy *rphy)
++{
++	/*
++	 * Set the utmi bvalid come from the usb phy or grf.
++	 * For most of Rockchip SoCs, them have VBUSDET pin
++	 * for the usb phy to detect the USB VBUS and set
++	 * the bvalid signal, so select the bvalid from the
++	 * usb phy by default. And for those SoCs which don't
++	 * have VBUSDET pin (e.g. RV1103), it needs to select
++	 * the bvaid from the grf and set bvalid to be valid
++	 * (high) by default.
++	 */
++	return regmap_write(rphy->grf, 0x0058, 0xc000c000);
++}
++
+ static const struct rockchip_usb2phy_cfg rk3128_phy_cfgs[] = {
+ 	{
+ 		.reg = 0x17c,
+@@ -2043,6 +2058,87 @@ static const struct rockchip_usb2phy_cfg rk3588_phy_cfgs[] = {
+ 	{ /* sentinel */ }
+ };
+ 
++static const struct rockchip_usb2phy_cfg rv1103_phy_cfgs[] = {
++	{
++		.reg = 0xff3e0000,
++		.num_ports	= 1,
++		.phy_tuning	= rv1103_usb2phy_tuning,
++		.clkout_ctl	= { 0x0058, 4, 4, 1, 0 },
++		.port_cfgs	= {
++			[USB2PHY_PORT_OTG] = {
++				.phy_sus	= { 0x0050, 8, 0, 0, 0x1d1 },
++				.bvalid_det_en	= { 0x0100, 2, 2, 0, 1 },
++				.bvalid_det_st	= { 0x0104, 2, 2, 0, 1 },
++				.bvalid_det_clr = { 0x0108, 2, 2, 0, 1 },
++				.idfall_det_en	= { 0x0100, 5, 5, 0, 1 },
++				.idfall_det_st	= { 0x0104, 5, 5, 0, 1 },
++				.idfall_det_clr = { 0x0108, 5, 5, 0, 1 },
++				.idrise_det_en	= { 0x0100, 4, 4, 0, 1 },
++				.idrise_det_st	= { 0x0104, 4, 4, 0, 1 },
++				.idrise_det_clr = { 0x0108, 4, 4, 0, 1 },
++				.ls_det_en	= { 0x0100, 0, 0, 0, 1 },
++				.ls_det_st	= { 0x0104, 0, 0, 0, 1 },
++				.ls_det_clr	= { 0x0108, 0, 0, 0, 1 },
++				.utmi_avalid	= { 0x0060, 10, 10, 0, 1 },
++				.utmi_bvalid	= { 0x0060, 9, 9, 0, 1 },
++				.utmi_ls	= { 0x0060, 5, 4, 0, 1 },
++			},
++		},
++		.chg_det = {
++			.cp_det		= { 0x0060, 13, 13, 0, 1 },
++			.dcp_det	= { 0x0060, 12, 12, 0, 1 },
++			.dp_det		= { 0x0060, 14, 14, 0, 1 },
++			.idm_sink_en	= { 0x0058, 8, 8, 0, 1 },
++			.idp_sink_en	= { 0x0058, 7, 7, 0, 1 },
++			.idp_src_en	= { 0x0058, 9, 9, 0, 1 },
++			.rdm_pdwn_en	= { 0x0058, 10, 10, 0, 1 },
++			.vdm_src_en	= { 0x0058, 12, 12, 0, 1 },
++			.vdp_src_en	= { 0x0058, 11, 11, 0, 1 },
++		},
++	},
++	{ /* sentinel */ }
++};
++
++static const struct rockchip_usb2phy_cfg rv1106_phy_cfgs[] = {
++	{
++		.reg = 0xff3e0000,
++		.num_ports	= 1,
++		.clkout_ctl	= { 0x0058, 4, 4, 1, 0 },
++		.port_cfgs	= {
++			[USB2PHY_PORT_OTG] = {
++				.phy_sus	= { 0x0050, 8, 0, 0, 0x1d1 },
++				.bvalid_det_en	= { 0x0100, 2, 2, 0, 1 },
++				.bvalid_det_st	= { 0x0104, 2, 2, 0, 1 },
++				.bvalid_det_clr = { 0x0108, 2, 2, 0, 1 },
++				.idfall_det_en	= { 0x0100, 5, 5, 0, 1 },
++				.idfall_det_st	= { 0x0104, 5, 5, 0, 1 },
++				.idfall_det_clr = { 0x0108, 5, 5, 0, 1 },
++				.idrise_det_en	= { 0x0100, 4, 4, 0, 1 },
++				.idrise_det_st	= { 0x0104, 4, 4, 0, 1 },
++				.idrise_det_clr = { 0x0108, 4, 4, 0, 1 },
++				.ls_det_en	= { 0x0100, 0, 0, 0, 1 },
++				.ls_det_st	= { 0x0104, 0, 0, 0, 1 },
++				.ls_det_clr	= { 0x0108, 0, 0, 0, 1 },
++				.utmi_avalid	= { 0x0060, 10, 10, 0, 1 },
++				.utmi_bvalid	= { 0x0060, 9, 9, 0, 1 },
++				.utmi_ls	= { 0x0060, 5, 4, 0, 1 },
++			},
++		},
++		.chg_det = {
++			.cp_det		= { 0x0060, 13, 13, 0, 1 },
++			.dcp_det	= { 0x0060, 12, 12, 0, 1 },
++			.dp_det		= { 0x0060, 14, 14, 0, 1 },
++			.idm_sink_en	= { 0x0058, 8, 8, 0, 1 },
++			.idp_sink_en	= { 0x0058, 7, 7, 0, 1 },
++			.idp_src_en	= { 0x0058, 9, 9, 0, 1 },
++			.rdm_pdwn_en	= { 0x0058, 10, 10, 0, 1 },
++			.vdm_src_en	= { 0x0058, 12, 12, 0, 1 },
++			.vdp_src_en	= { 0x0058, 11, 11, 0, 1 },
++		},
++	},
++	{ /* sentinel */ }
++};
++
+ static const struct rockchip_usb2phy_cfg rv1108_phy_cfgs[] = {
+ 	{
+ 		.reg = 0x100,
+@@ -2095,6 +2191,8 @@ static const struct of_device_id rockchip_usb2phy_dt_match[] = {
+ 	{ .compatible = "rockchip,rk3399-usb2phy", .data = &rk3399_phy_cfgs },
+ 	{ .compatible = "rockchip,rk3568-usb2phy", .data = &rk3568_phy_cfgs },
+ 	{ .compatible = "rockchip,rk3588-usb2phy", .data = &rk3588_phy_cfgs },
++	{ .compatible = "rockchip,rv1103-usb2phy", .data = &rv1103_phy_cfgs },
++	{ .compatible = "rockchip,rv1106-usb2phy", .data = &rv1106_phy_cfgs },
+ 	{ .compatible = "rockchip,rv1108-usb2phy", .data = &rv1108_phy_cfgs },
+ 	{}
+ };
 diff --git a/drivers/pinctrl/pinctrl-rockchip.c b/drivers/pinctrl/pinctrl-rockchip.c
 index 5c1bc4d5b..5205fe146 100644
 --- a/drivers/pinctrl/pinctrl-rockchip.c
