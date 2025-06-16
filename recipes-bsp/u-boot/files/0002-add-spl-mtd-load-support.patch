@@ -63,7 +63,7 @@ index 3dce9b30..0bbf2c68 100644
  				debug("%s: could not find udevice for %s\n", __func__, conf);
  				continue;
 diff --git a/common/spl/Kconfig b/common/spl/Kconfig
-index 240543c9..bd9e39d6 100644
+index 240543c9..41215859 100644
 --- a/common/spl/Kconfig
 +++ b/common/spl/Kconfig
 @@ -929,6 +929,20 @@ config SPL_MTD
@@ -91,7 +91,7 @@ index 240543c9..bd9e39d6 100644
  	help
  	  SPL uses the chip ID list to identify the NAND flash.
  
-+config SPL_NAND_SPI_SUPPORT
++config SPL_SPINAND_SUPPORT
 +	bool "Support loading from SPI NAND flash"
 +	depends on SPL_MTD_LOAD
 +	help
@@ -114,17 +114,15 @@ index 75123eb6..f095d0b1 100644
  endif
 diff --git a/common/spl/spl_mtd.c b/common/spl/spl_mtd.c
 new file mode 100644
-index 00000000..7b9d6b33
+index 00000000..caa4f2fd
 --- /dev/null
 +++ b/common/spl/spl_mtd.c
-@@ -0,0 +1,73 @@
+@@ -0,0 +1,71 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/*
-+ * FIT image loader using MTD read
-+ *
-+ * Copyright (C) 2018 Texas Instruments Incorporated - http://www.ti.com/
-+ *	Apurva Nandan <a-nandan@ti.com>
++ * Copyright (C) 2025 Raman Rakavets <radikot88@gmail.com>
 + */
++ 
 +#include <config.h>
 +#include <image.h>
 +#include <log.h>
@@ -192,19 +190,32 @@ index 00000000..7b9d6b33
 +
 +SPL_LOAD_IMAGE_METHOD("SPINAND", 0, BOOT_DEVICE_SPINAND, spl_mtd_load_image);
 diff --git a/drivers/mtd/Makefile b/drivers/mtd/Makefile
-index ce05e206..a1f9a1dd 100644
+index ce05e206..e62dafa1 100644
 --- a/drivers/mtd/Makefile
 +++ b/drivers/mtd/Makefile
 @@ -35,6 +35,7 @@ ifneq ($(mtd-y),)
  obj-$(CONFIG_SPL_MTD) += mtd.o
  endif
  obj-$(CONFIG_$(PHASE_)NAND_SUPPORT) += nand/
-+obj-$(CONFIG_$(PHASE_)NAND_SPI_SUPPORT) += nand/
++obj-$(CONFIG_$(PHASE_)SPINAND_SUPPORT) += nand/
  obj-$(CONFIG_SPL_ONENAND_SUPPORT) += onenand/
  obj-$(CONFIG_$(PHASE_)SPI_FLASH_SUPPORT) += spi/
  obj-$(CONFIG_SPL_UBI) += ubispl/
+diff --git a/drivers/mtd/mtd_uboot.c b/drivers/mtd/mtd_uboot.c
+index 69cb3b51..f6402a59 100644
+--- a/drivers/mtd/mtd_uboot.c
++++ b/drivers/mtd/mtd_uboot.c
+@@ -124,7 +124,7 @@ static void mtd_probe_uclass_spi_nor_devs(void)
+ static void mtd_probe_uclass_spi_nor_devs(void) { }
+ #endif
+ 
+-#if defined(CONFIG_MTD_PARTITIONS)
++#if defined(CONFIG_MTD_PARTITIONS) && !defined(CONFIG_XPL_BUILD)
+ 
+ #define MTDPARTS_MAXLEN         512
+ 
 diff --git a/drivers/mtd/nand/Makefile b/drivers/mtd/nand/Makefile
-index c8169cf7..c6116f67 100644
+index c8169cf7..454af181 100644
 --- a/drivers/mtd/nand/Makefile
 +++ b/drivers/mtd/nand/Makefile
 @@ -6,5 +6,7 @@ obj-$(CONFIG_MTD_NAND_CORE) += nandcore.o
@@ -213,17 +224,17 @@ index c8169cf7..c6116f67 100644
  else
 +nandcore-objs := core.o bbt.o
  obj-$(CONFIG_$(PHASE_)NAND_SUPPORT) += raw/
-+obj-$(CONFIG_$(PHASE_)NAND_SPI_SUPPORT) += spi/ nandcore.o
++obj-$(CONFIG_$(PHASE_)SPINAND_SUPPORT) += spi/ nandcore.o
  endif
 diff --git a/drivers/mtd/nand/spi/Makefile b/drivers/mtd/nand/spi/Makefile
-index 65b836b3..5c75e31f 100644
+index 65b836b3..8b7edf8b 100644
 --- a/drivers/mtd/nand/spi/Makefile
 +++ b/drivers/mtd/nand/spi/Makefile
 @@ -2,4 +2,5 @@
  
  spinand-objs := core.o esmt.o gigadevice.o macronix.o micron.o paragon.o
  spinand-objs += toshiba.o winbond.o xtx.o
-+obj-$(CONFIG_$(PHASE_)NAND_SPI_SUPPORT) += spinand.o
++obj-$(CONFIG_$(PHASE_)SPINAND_SUPPORT) += spinand.o
  obj-$(CONFIG_MTD_SPI_NAND) += spinand.o
 diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
 index f5ddfbf4..efe01759 100644
@@ -238,22 +249,3 @@ index f5ddfbf4..efe01759 100644
  	op.addr.val = column;
  
  	/*
-diff --git a/include/configs/rv1106_common.h b/include/configs/rv1106_common.h
-index 72827bdb..76dec104 100644
---- a/include/configs/rv1106_common.h
-+++ b/include/configs/rv1106_common.h
-@@ -34,6 +34,14 @@
- 	"kernel_addr_r=0x00010000\0"	\
- 	"ramdisk_addr_r=0x000e00000\0"
- 
-+#if !defined(PARTS_DEFAULT)
-+#define PARTS_DEFAULT
-+#endif
-+
-+#if !defined(BOOT_TARGETS)
-+#define BOOT_TARGETS
-+#endif
-+
- #define CFG_EXTRA_ENV_SETTINGS \
- 	"fdtfile=" CONFIG_DEFAULT_FDT_FILE "\0" \
- 	"partitions=" PARTS_DEFAULT \
