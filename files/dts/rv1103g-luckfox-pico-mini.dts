@@ -3,9 +3,14 @@
  * Copyright (c) 2023 Luckfox Electronics Co., Ltd.
  */
 
+/dts-v1/;
+
 #include "rv1103g.dtsi"
 
 / {
+	model = "Luckfox Pico Mini";
+	compatible = "rockchip,rv1103g-luckfox-pico-mini", "rockchip,rv1103";	
+
 	chosen {
 		stdout-path = "serial2:115200n8";
 	};
@@ -80,6 +85,18 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&sdmmc0_clk &sdmmc0_cmd &sdmmc0_det &sdmmc0_bus4>;
 	status = "okay";
+};
+
+&sfc {
+	status = "okay";
+
+	spi_nand: flash@0 {
+		compatible = "spi-nand";
+		reg = <0>;
+		spi-max-frequency = <75000000>;
+		spi-rx-bus-width = <4>;
+		spi-tx-bus-width = <1>;
+	};
 };
 
 &saradc {
