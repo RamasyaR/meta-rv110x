@@ -49,14 +49,6 @@
 	bootph-pre-ram;
 };
 
-&sdmmc {
-	bootph-pre-ram;
-};
-
-&sfc {
-	bootph-pre-ram;
-};
-
 &usbdrd {
 	bootph-all;
 };
@@ -82,5 +74,9 @@
 };
 
 &gpio4 {
+	bootph-all;
+};
+
+&pinctrl {
 	bootph-all;
 };
