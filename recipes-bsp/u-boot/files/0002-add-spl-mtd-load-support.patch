@@ -1,5 +1,4 @@
-Upstream-Status: Submitted [by someone else]
-
+Upstream-Status: Inappropriate [embedded specific]
 diff --git a/arch/arm/include/asm/spl.h b/arch/arm/include/asm/spl.h
 index ee79a19c..cd9b7942 100644
 --- a/arch/arm/include/asm/spl.h

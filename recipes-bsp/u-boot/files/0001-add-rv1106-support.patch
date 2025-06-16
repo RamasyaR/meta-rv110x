@@ -1,5 +1,4 @@
-Upstream-Status: Submitted [by someone else]
-
+Upstream-Status: Inappropriate [embedded specific]
 diff --git a/arch/arm/include/asm/arch-rockchip/cru_rv1106.h b/arch/arm/include/asm/arch-rockchip/cru_rv1106.h
 new file mode 100644
 index 00000000..ba89d4e0
