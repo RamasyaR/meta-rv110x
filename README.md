@@ -13,12 +13,13 @@ Rockchip boards based on RV1103/RV1106 using ported rockchip-linux sources.
 | Name                | Link                                          | View     |
 :--------------------:|:---------------------------------------------:|:-----------:
 | Luckfox Pico Mini A | <https://www.luckfox.com/Luckfox-Pico-Mini-A> | <img src="files/img/luckfox_pico_mini_a.png" width="40%">|
+| Luckfox Pico Mini B | <https://www.luckfox.com/Luckfox-Pico-Mini-A> | <img src="files/img/luckfox_pico_mini_b.png" width="40%">|
 
 ## 🔧 Development status
 - [x] 🚀 Initial support in u-boot
 - [x] ✈️ Initial support in linux kernel
 - [x] 🌐 Ethernet with static MAC
-- [ ] 📼 Boot from NAND
+- [x] 📼 Boot from NAND
 - [x] 🔌 USB host and gadget support
 - [ ] 📷 Camera serial interface
 - [ ] 📥 RAUC support for SD card
