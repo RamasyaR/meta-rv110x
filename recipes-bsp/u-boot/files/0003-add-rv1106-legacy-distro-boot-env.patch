@@ -1,0 +1,26 @@
+Upstream-Status: Inappropriate [embedded specific]
+diff --git a/include/configs/rv1106_common.h b/include/configs/rv1106_common.h
+index 72827bdb..75d40387 100644
+--- a/include/configs/rv1106_common.h
++++ b/include/configs/rv1106_common.h
+@@ -34,11 +34,19 @@
+ 	"kernel_addr_r=0x00010000\0"	\
+ 	"ramdisk_addr_r=0x000e00000\0"
+ 
++/* Enable Distro Boot */
++#define BOOT_TARGET_DEVICES(func) \
++	func(MMC, mmc, 1) \
++	func(UBIFS, ubifs, 0, rootfs, rootfs)
++
++#include <config_distro_bootcmd.h>
++
+ #define CFG_EXTRA_ENV_SETTINGS \
+ 	"fdtfile=" CONFIG_DEFAULT_FDT_FILE "\0" \
+ 	"partitions=" PARTS_DEFAULT \
+ 	ENV_MEM_LAYOUT_SETTINGS	 \
+ 	ROCKCHIP_DEVICE_SETTINGS \
+-	"boot_targets=" BOOT_TARGETS "\0"
++	"boot_targets=" BOOT_TARGETS "\0" \
++	BOOTENV
+ 
+ #endif	/* __CONFIG_RV1106_COMMON_H */
