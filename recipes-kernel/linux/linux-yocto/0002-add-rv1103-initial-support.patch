@@ -1,5 +1,17 @@
 Upstream-Status: Inappropriate [embedded specific]
-
+diff --git a/arch/arm/mach-rockchip/rockchip.c b/arch/arm/mach-rockchip/rockchip.c
+index 82102fbab..19547418f 100644
+--- a/arch/arm/mach-rockchip/rockchip.c
++++ b/arch/arm/mach-rockchip/rockchip.c
+@@ -58,6 +58,8 @@ static const char * const rockchip_board_dt_compat[] = {
+ 	"rockchip,rk3188",
+ 	"rockchip,rk3228",
+ 	"rockchip,rk3288",
++	"rockchip,rv1103",
++	"rockchip,rv1106",
+ 	"rockchip,rv1108",
+ 	NULL,
+ };
 diff --git a/drivers/clk/rockchip/Kconfig b/drivers/clk/rockchip/Kconfig
 index 570ad9083..e6ffe52f9 100644
 --- a/drivers/clk/rockchip/Kconfig
