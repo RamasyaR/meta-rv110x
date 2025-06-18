@@ -11,6 +11,11 @@
 		compatible = "rockchip,rv1103-dmc", "rockchip,rv1106-dmc";
 		bootph-all;
 	};
+
+	rng: rng@ff448000 {
+		compatible = "rockchip,trngv1";
+		reg = <0xff448000 0x200>;
+	};
 };
 
 &grf {
