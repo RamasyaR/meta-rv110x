@@ -42,6 +42,8 @@ This layer depends on:
 
 If you have a desire to help with the development of this layer, or perhaps you would like to help develop patches with soc support for u-boot or linux kernel, then open discussions or pull requests, I would be very glad of any help.
 
+Also, for a quick start, you might find the configured [luckfox-yocto](https://github.com/RamasyaR/luckfox-yocto) project helpful.
+
 ## 🦾 Maintainers
 
 * Raman Rakavets `<radikot88@gmail.com>`
