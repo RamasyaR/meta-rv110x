@@ -1,5 +1,6 @@
-Upstream-Status: Submitted [by someone else]
+Upstream-Status: Inappropriate
 
+Signed-off-by: Raman Rakavets <radikot88@gmail.com>
 diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
 index 39b5846db..e12890a69 100644
 --- a/drivers/mmc/core/core.c

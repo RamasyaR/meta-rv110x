@@ -1,0 +1,63 @@
+Upstream-Status: Inappropriate
+
+Signed-off-by: Raman Rakavets <radikot88@gmail.com>
+diff --git a/drivers/gpu/drm/rockchip/rockchip_vop_reg.c b/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
+index e2c6ba26f..373087197 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
++++ b/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
+@@ -1179,6 +1179,46 @@ static const struct vop_data rk3328_vop = {
+ 	.max_output = { 4096, 2160 },
+ };
+ 
++static const struct vop_common rv1106_common = {
++	.cfg_done = VOP_REG(PX30_REG_CFG_DONE, 0x1, 0),
++	.dsp_blank = VOP_REG(PX30_DSP_CTRL2, 0x1, 14),
++	.dither_down_sel = VOP_REG(PX30_DSP_CTRL2, 0x1, 7),
++	.dither_down_mode = VOP_REG(PX30_DSP_CTRL2, 0x1, 6),
++	.dither_down_en = VOP_REG(PX30_DSP_CTRL2, 0x1, 8),
++	.dither_up = VOP_REG(PX30_DSP_CTRL2, 0x1, 2),
++	.gate_en = VOP_REG(PX30_SYS_CTRL2, 0x1, 0),
++	.out_mode = VOP_REG(PX30_DSP_CTRL2, 0xf, 16),
++	.standby = VOP_REG(PX30_SYS_CTRL2, 0x1, 1),
++};
++
++static const struct vop_modeset rv1106_modeset = {
++	.htotal_pw = VOP_REG(PX30_DSP_HTOTAL_HS_END, 0x0fff0fff, 0),
++	.hact_st_end = VOP_REG(PX30_DSP_HACT_ST_END, 0x0fff0fff, 0),
++	.vtotal_pw = VOP_REG(PX30_DSP_VTOTAL_VS_END, 0x0fff0fff, 0),
++	.vact_st_end = VOP_REG(PX30_DSP_VACT_ST_END, 0x0fff0fff, 0),
++};
++
++static const struct vop_output rv1106_output = {
++	.rgb_dclk_pol = VOP_REG(PX30_DSP_CTRL0, 0x1, 1),
++	.rgb_en = VOP_REG(PX30_DSP_CTRL0, 0x1, 0),
++};
++
++static const struct vop_win_data rv1106_vop_win_data[] = {
++	{ .base = 0x00, .phy = &px30_win1_data,
++	  .type = DRM_PLANE_TYPE_PRIMARY },
++};
++
++static const struct vop_data rv1106_vop = {
++	.version = VOP_VERSION(2, 0xc),
++	.intr = &px30_intr,
++	.common = &rv1106_common,
++	.modeset = &rv1106_modeset,
++	.output = &rv1106_output,
++	.win = rv1106_vop_win_data,
++	.win_size = ARRAY_SIZE(rv1106_vop_win_data),
++	.max_output = {1280, 1280},
++};
++
+ static const struct vop_common rv1126_common = {
+ 	.standby = VOP_REG_SYNC(PX30_SYS_CTRL2, 0x1, 1),
+ 	.out_mode = VOP_REG(PX30_DSP_CTRL2, 0xf, 16),
+@@ -1259,6 +1299,8 @@ static const struct of_device_id vop_driver_dt_match[] = {
+ 	  .data = &rk3228_vop },
+ 	{ .compatible = "rockchip,rk3328-vop",
+ 	  .data = &rk3328_vop },
++	{ .compatible = "rockchip,rv1106-vop",
++	  .data = &rv1106_vop },
+ 	{ .compatible = "rockchip,rv1126-vop",
+ 	  .data = &rv1126_vop },
+ 	{},
