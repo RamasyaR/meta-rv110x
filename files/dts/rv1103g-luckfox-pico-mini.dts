@@ -129,6 +129,10 @@
 	status = "okay";
 };
 
+&csi_dphy {
+	status = "okay";
+};
+
 &usbdrd {
 	status = "okay";
 };

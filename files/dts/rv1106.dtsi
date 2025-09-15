@@ -450,6 +450,18 @@
 		};
 	};
 
+	csi_dphy: phy@ff3e8000 {
+		compatible = "rockchip,rv1106-csi-dphy";
+		reg = <0xff3e8000 0x8000>;
+		clocks = <&cru PCLK_MIPICSIPHY>;
+		clock-names = "pclk";
+		#phy-cells = <0>;
+		resets = <&cru SRST_P_MIPICSIPHY>;
+		reset-names = "apb";
+		rockchip,grf = <&grf>;
+		status = "disabled";
+	};
+
 	dmac: dma-controller@ff420000 {
 		compatible = "arm,pl330", "arm,primecell";
 		reg = <0xff420000 0x4000>;
