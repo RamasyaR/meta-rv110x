@@ -27,7 +27,4 @@ SRC_URI += " \
 
 do_configure:append() {
     cp ${UNPACKDIR}/rv110*.dts* ${S}/arch/arm/boot/dts/rockchip
-    cat << EOF >> ${S}/arch/arm/boot/dts/rockchip/Makefile
-dtb-$(CONFIG_ARCH_ROCKCHIP) += luckfox-pico-mini.dts
-EOF
 }
