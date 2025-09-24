@@ -1,3 +1,5 @@
+KERNEL_DTC_FLAGS:append = " -@"
+
 KERNEL_FEATURES:append = " \
     bsp/rockchip/remove-non-rockchip-arch-arm.scc \
     bsp/rv/add-rv-specific-drivers.scc \

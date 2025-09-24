@@ -2727,16 +2727,16 @@ index 00000000..72827bdb
 +#define CFG_SYS_SDRAM_BASE		0
 +#define SDRAM_MAX_SIZE			0xff000000
 +
-+/*
-+ *   Image:  0 - 8M
-+ *  zImage:  8 - 12M
-+ *     fdt: 12 - 13M
-+ * ramdisk: 14 ...
-+ */
++
++
++
++
++
 +#define ENV_MEM_LAYOUT_SETTINGS		\
 +	"scriptaddr=0x00b00000\0"	\
 +	"pxefile_addr_r=0x00c00000\0"	\
 +	"fdt_addr_r=0x00c00000\0"	\
++	"fdtoverlay_addr_r=0x00d00000\0" \
 +	"kernel_addr_r=0x00010000\0"	\
 +	"ramdisk_addr_r=0x000e00000\0"
 +
