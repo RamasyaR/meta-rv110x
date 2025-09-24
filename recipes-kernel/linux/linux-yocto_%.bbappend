@@ -16,6 +16,8 @@ SRC_URI += " \
     file://0009-add-rv1106-csi-dphy-support.patch \
     file://0010-add-backport-rk3568-mipi-csi-driver.patch \
     file://0011-add-rv1106-mipi-csi-support.patch \
+    file://0012-add-backport-rk3568-vicap-driver.patch \
+    file://0013-add-rv1106-vicap-support.patch \
     file://rv1103g-luckfox-pico-mini.dts \
     file://rv1103g.dtsi \
     file://rv1106-pinctrl.dtsi \

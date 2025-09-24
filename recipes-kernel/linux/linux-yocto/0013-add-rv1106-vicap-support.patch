@@ -1,0 +1,176 @@
+Upstream-Status: Inappropriate
+
+Signed-off-by: Raman Rakavets <radikot88@gmail.com>
+diff --git a/drivers/media/platform/rockchip/rkcif/rkcif-capture-mipi.c b/drivers/media/platform/rockchip/rkcif/rkcif-capture-mipi.c
+index 690d27497..e01a06d25 100644
+--- a/drivers/media/platform/rockchip/rkcif/rkcif-capture-mipi.c
++++ b/drivers/media/platform/rockchip/rkcif/rkcif-capture-mipi.c
+@@ -614,6 +614,78 @@ const struct rkcif_mipi_match_data rkcif_rk3588_vicap_mipi_match_data = {
+ 	},
+ };
+ 
++const struct rkcif_mipi_match_data rkcif_rv1106_vicap_mipi_match_data = {
++	.mipi_num = 1,
++	.mipi_ctrl0 = rkcif_rk3588_mipi_ctrl0,
++	.regs = {
++		[RKCIF_MIPI_CTRL] = 0x20,
++		[RKCIF_MIPI_INTEN] = 0x74,
++		[RKCIF_MIPI_INTSTAT] = 0x78,
++	},
++	.regs_id = {
++		[RKCIF_ID0] = {
++			[RKCIF_MIPI_CTRL0] = 0x00,
++			[RKCIF_MIPI_CTRL1] = 0x04,
++			[RKCIF_MIPI_FRAME0_ADDR_Y] = 0x24,
++			[RKCIF_MIPI_FRAME0_ADDR_UV] = 0x2c,
++			[RKCIF_MIPI_FRAME0_VLW_Y] = 0x34,
++			[RKCIF_MIPI_FRAME0_VLW_UV] = RKCIF_REGISTER_NOTSUPPORTED,
++			[RKCIF_MIPI_FRAME1_ADDR_Y] = 0x28,
++			[RKCIF_MIPI_FRAME1_ADDR_UV] = 0x30,
++			[RKCIF_MIPI_FRAME1_VLW_Y] = RKCIF_REGISTER_NOTSUPPORTED,
++			[RKCIF_MIPI_FRAME1_VLW_UV] = RKCIF_REGISTER_NOTSUPPORTED,
++			[RKCIF_MIPI_CROP_START] = 0x8c,
++		},
++		[RKCIF_ID1] = {
++			[RKCIF_MIPI_CTRL0] = 0x08,
++			[RKCIF_MIPI_CTRL1] = 0x0c,
++			[RKCIF_MIPI_FRAME0_ADDR_Y] = 0x38,
++			[RKCIF_MIPI_FRAME0_ADDR_UV] = 0x40,
++			[RKCIF_MIPI_FRAME0_VLW_Y] = 0x48,
++			[RKCIF_MIPI_FRAME0_VLW_UV] = RKCIF_REGISTER_NOTSUPPORTED,
++			[RKCIF_MIPI_FRAME1_ADDR_Y] = 0x3c,
++			[RKCIF_MIPI_FRAME1_ADDR_UV] = 0x44,
++			[RKCIF_MIPI_FRAME1_VLW_Y] = RKCIF_REGISTER_NOTSUPPORTED,
++			[RKCIF_MIPI_FRAME1_VLW_UV] = RKCIF_REGISTER_NOTSUPPORTED,
++			[RKCIF_MIPI_CROP_START] = 0x90,
++		},
++		[RKCIF_ID2] = {
++			[RKCIF_MIPI_CTRL0] = 0x10,
++			[RKCIF_MIPI_CTRL1] = 0x14,
++			[RKCIF_MIPI_FRAME0_ADDR_Y] = 0x3c,
++			[RKCIF_MIPI_FRAME0_ADDR_UV] = 0x54,
++			[RKCIF_MIPI_FRAME0_VLW_Y] = 0x5c,
++			[RKCIF_MIPI_FRAME0_VLW_UV] = RKCIF_REGISTER_NOTSUPPORTED,
++			[RKCIF_MIPI_FRAME1_ADDR_Y] = 0x50,
++			[RKCIF_MIPI_FRAME1_ADDR_UV] = 0x58,
++			[RKCIF_MIPI_FRAME1_VLW_Y] = RKCIF_REGISTER_NOTSUPPORTED,
++			[RKCIF_MIPI_FRAME1_VLW_UV] = RKCIF_REGISTER_NOTSUPPORTED,
++			[RKCIF_MIPI_CROP_START] = 0x94,
++		},
++		[RKCIF_ID3] = {
++			[RKCIF_MIPI_CTRL0] = 0x18,
++			[RKCIF_MIPI_CTRL1] = 0x1c,
++			[RKCIF_MIPI_FRAME0_ADDR_Y] = 0x60,
++			[RKCIF_MIPI_FRAME0_ADDR_UV] = 0x68,
++			[RKCIF_MIPI_FRAME0_VLW_Y] = 0x70,
++			[RKCIF_MIPI_FRAME0_VLW_UV] = RKCIF_REGISTER_NOTSUPPORTED,
++			[RKCIF_MIPI_FRAME1_ADDR_Y] = 0x64,
++			[RKCIF_MIPI_FRAME1_ADDR_UV] = 0x6c,
++			[RKCIF_MIPI_FRAME1_VLW_Y] = RKCIF_REGISTER_NOTSUPPORTED,
++			[RKCIF_MIPI_FRAME1_VLW_UV] = RKCIF_REGISTER_NOTSUPPORTED,
++			[RKCIF_MIPI_CROP_START] = 0x98,
++		},
++	},
++	.blocks = {
++		{
++			.offset = 0x100,
++		},
++		{
++			.offset = 0x300,
++		},
++	},
++};
++
+ static inline unsigned int rkcif_mipi_get_reg(struct rkcif_interface *interface,
+ 					      unsigned int index)
+ {
+diff --git a/drivers/media/platform/rockchip/rkcif/rkcif-capture-mipi.h b/drivers/media/platform/rockchip/rkcif/rkcif-capture-mipi.h
+index 10999621a..4736f5ffe 100644
+--- a/drivers/media/platform/rockchip/rkcif/rkcif-capture-mipi.h
++++ b/drivers/media/platform/rockchip/rkcif/rkcif-capture-mipi.h
+@@ -13,6 +13,7 @@
+ 
+ extern const struct rkcif_mipi_match_data rkcif_rk3568_vicap_mipi_match_data;
+ extern const struct rkcif_mipi_match_data rkcif_rk3588_vicap_mipi_match_data;
++extern const struct rkcif_mipi_match_data rkcif_rv1106_vicap_mipi_match_data;
+ 
+ int rkcif_mipi_register(struct rkcif_device *rkcif);
+ 
+diff --git a/drivers/media/platform/rockchip/rkcif/rkcif-common.h b/drivers/media/platform/rockchip/rkcif/rkcif-common.h
+index c9b02127a..ab03b9b27 100644
+--- a/drivers/media/platform/rockchip/rkcif/rkcif-common.h
++++ b/drivers/media/platform/rockchip/rkcif/rkcif-common.h
+@@ -26,7 +26,6 @@
+ #include "rkcif-regs.h"
+ 
+ #define RKCIF_DRIVER_NAME "rockchip-cif"
+-#define RKCIF_CLK_MAX	  5
+ 
+ enum rkcif_format_type {
+ 	RKCIF_FMT_TYPE_INVALID,
+@@ -233,7 +232,7 @@ struct rkcif_device {
+ 	struct device *dev;
+ 
+ 	const struct rkcif_match_data *match_data;
+-	struct clk_bulk_data clks[RKCIF_CLK_MAX];
++	struct clk_bulk_data *clks;
+ 	unsigned int clks_num;
+ 	struct regmap *grf;
+ 	struct reset_control *reset;
+diff --git a/drivers/media/platform/rockchip/rkcif/rkcif-dev.c b/drivers/media/platform/rockchip/rkcif/rkcif-dev.c
+index 11d643ff5..e5c72e350 100644
+--- a/drivers/media/platform/rockchip/rkcif/rkcif-dev.c
++++ b/drivers/media/platform/rockchip/rkcif/rkcif-dev.c
+@@ -66,6 +66,27 @@ static const struct rkcif_match_data rk3588_vicap_match_data = {
+ 	.mipi = &rkcif_rk3588_vicap_mipi_match_data,
+ };
+ 
++static const char *const rv1106_vicap_clks[] = {
++	"aclk",
++	"hclk",
++	"dclk",
++	"pclk",
++	"iclk_host0",
++	"iclk_host1",
++	"rx0pclk",
++	"rx1pclk",
++	"isp0clk",
++	"sclk_m0",
++	"sclk_m1",
++	"pclk_vepu",
++};
++
++static const struct rkcif_match_data rv1106_vicap_match_data = {
++	.clks = rv1106_vicap_clks,
++	.clks_num = ARRAY_SIZE(rv1106_vicap_clks),
++	.mipi = &rkcif_rv1106_vicap_mipi_match_data,
++};
++
+ static const struct of_device_id rkcif_plat_of_match[] = {
+ 	{
+ 		.compatible = "rockchip,px30-vip",
+@@ -79,6 +100,10 @@ static const struct of_device_id rkcif_plat_of_match[] = {
+ 		.compatible = "rockchip,rk3588-vicap",
+ 		.data = &rk3588_vicap_match_data,
+ 	},
++	{
++		.compatible = "rockchip,rv1106-vicap",
++		.data = &rv1106_vicap_match_data,
++	},
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, rkcif_plat_of_match);
+@@ -203,8 +228,11 @@ static int rkcif_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return dev_err_probe(dev, ret, "failed to request irq\n");
+ 
+-	if (rkcif->match_data->clks_num > RKCIF_CLK_MAX)
+-		return dev_err_probe(dev, -EINVAL, "invalid number of clocks\n");
++	rkcif->clks = devm_kcalloc(dev, rkcif->match_data->clks_num, sizeof(*rkcif->clks),
++				   GFP_KERNEL);
++	if (!rkcif->clks)
++		return -ENOMEM;
++
+ 	rkcif->clks_num = rkcif->match_data->clks_num;
+ 	for (unsigned int i = 0; i < rkcif->clks_num; i++)
+ 		rkcif->clks[i].id = rkcif->match_data->clks[i];
