@@ -1,0 +1,114 @@
+Upstream-Status: Inappropriate
+
+Signed-off-by: Raman Rakavets <radikot88@gmail.com>
+diff --git a/drivers/media/platform/rockchip/rkcsi/rkcsi.c b/drivers/media/platform/rockchip/rkcsi/rkcsi.c
+index e5925cea2..1fc7bfa37 100644
+--- a/drivers/media/platform/rockchip/rkcsi/rkcsi.c
++++ b/drivers/media/platform/rockchip/rkcsi/rkcsi.c
+@@ -39,8 +39,6 @@
+ #define SW_DATATYPE_LS(x)    ((x) << 20)
+ #define SW_DATATYPE_LE(x)    ((x) << 26)
+ 
+-#define RKCSI_CLKS_MAX	     1
+-
+ enum {
+ 	RKCSI_PAD_SINK,
+ 	RKCSI_PAD_SRC,
+@@ -53,6 +51,11 @@ struct rkcsi_format {
+ 	u8 csi_dt;
+ };
+ 
++struct rkcsi_drv_data {
++	const char * const *clks;
++	int num_clks;
++};
++
+ struct rkcsi_device {
+ 	struct device *dev;
+ 
+@@ -65,6 +68,8 @@ struct rkcsi_device {
+ 	const struct rkcsi_format *formats;
+ 	unsigned int formats_num;
+ 
++	const struct rkcsi_drv_data *drv_data;
++
+ 	struct media_pad pads[RKCSI_PAD_MAX];
+ 	struct v4l2_async_notifier notifier;
+ 	struct v4l2_fwnode_endpoint vep;
+@@ -628,9 +633,33 @@ static void rkcsi_unregister(struct rkcsi_device *csi_dev)
+ 	v4l2_async_nf_cleanup(&csi_dev->notifier);
+ }
+ 
++static const char * const rk3568_rkcsi_clocks[] = {
++	"pclk",
++};
++
++
++static const struct rkcsi_drv_data rk3568_rkcsi_drv_data = {
++	.clks = rk3568_rkcsi_clocks,
++	.num_clks = ARRAY_SIZE(rk3568_rkcsi_clocks),
++};
++
++static const char * const rv1106_rkcsi_clocks[] = {
++	"pclk", "clk_rxbyte",
++};
++
++static const struct rkcsi_drv_data rv1106_rkcsi_drv_data = {
++	.clks = rv1106_rkcsi_clocks,
++	.num_clks = ARRAY_SIZE(rv1106_rkcsi_clocks),
++};
++
+ static const struct of_device_id rkcsi_of_match[] = {
+ 	{
+ 		.compatible = "rockchip,rk3568-mipi-csi",
++		.data = &rk3568_rkcsi_drv_data,
++	},
++	{
++		.compatible = "rockchip,rv1106-mipi-csi",
++		.data = &rv1106_rkcsi_drv_data,
+ 	},
+ 	{}
+ };
+@@ -661,12 +690,19 @@ static int rkcsi_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct rkcsi_device *csi_dev;
++	const struct rkcsi_drv_data *data;
+ 	int ret, irq;
+ 
++	data = of_device_get_match_data(dev);
++	if (!data) {
++		return dev_err_probe(dev, -EINVAL, "failed to get match data\n");
++	}
++	
+ 	csi_dev = devm_kzalloc(dev, sizeof(*csi_dev), GFP_KERNEL);
+ 	if (!csi_dev)
+ 		return -ENOMEM;
+ 	csi_dev->dev = dev;
++	csi_dev->drv_data = data;
+ 	dev_set_drvdata(dev, csi_dev);
+ 
+ 	csi_dev->base_addr = devm_platform_ioremap_resource(pdev, 0);
+@@ -695,10 +731,18 @@ static int rkcsi_probe(struct platform_device *pdev)
+ 		dev_err(&pdev->dev, "No found irq csi-intr2\n");
+ 	}
+ 
+-	ret = devm_clk_bulk_get_all(dev, &csi_dev->clks);
+-	if (ret != RKCSI_CLKS_MAX)
+-		return dev_err_probe(dev, -ENODEV, "failed to get clocks\n");
+-	csi_dev->clks_num = ret;
++	csi_dev->clks = devm_kcalloc(dev, csi_dev->drv_data->num_clks, sizeof(*csi_dev->clks),
++				     GFP_KERNEL);
++	if (!csi_dev->clks)
++		return -ENOMEM;
++
++	for (unsigned int i = 0; i < csi_dev->drv_data->num_clks; ++i)
++		csi_dev->clks[i].id = csi_dev->drv_data->clks[i];
++
++	ret = devm_clk_bulk_get(dev, csi_dev->drv_data->num_clks, csi_dev->clks);
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to get clocks\n");
++	csi_dev->clks_num = csi_dev->drv_data->num_clks;
+ 
+ 	csi_dev->phy = devm_phy_get(dev, NULL);
+ 	if (IS_ERR(csi_dev->phy))
