@@ -763,6 +763,62 @@
 		status = "disabled";
 	};
 
+	vicap: video-capture@ffa10000 {
+		compatible = "rockchip,rv1106-vicap";
+		reg = <0xffa10000 0x10000>;
+		interrupts = <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>;
+		clocks = <&cru ACLK_VICAP>, <&cru HCLK_VICAP>,
+			 <&cru DCLK_VICAP>, <&cru PCLK_VICAP>,
+			 <&cru I0CLK_VICAP>, <&cru I1CLK_VICAP>,
+			 <&cru RX0PCLK_VICAP>, <&cru RX1PCLK_VICAP>,
+			 <&cru ISP0CLK_VICAP>, <&cru SCLK_VICAP_M0>,
+			 <&cru SCLK_VICAP_M1>, <&cru PCLK_VICAP_VEPU>;
+		clock-names = "aclk", "hclk", "dclk", "pclk",
+			      "iclk_host0", "iclk_host1", "rx0pclk", "rx1pclk",
+			      "isp0clk", "sclk_m0", "sclk_m1", "pclk_vepu";
+		resets = <&cru SRST_A_VICAP>, <&cru SRST_H_VICAP>,
+			 <&cru SRST_D_VICAP>, <&cru SRST_P_VICAP>,
+			 <&cru SRST_VICAP_I0>, <&cru SRST_VICAP_I1>,
+			 <&cru SRST_VICAP_RX0>, <&cru SRST_VICAP_RX1>,
+			 <&cru SRST_VICAP_ISP0>, <&cru SRST_P_VICAP_VEPU>;
+		reset-names = "arst", "hrst", "drst", "prst", "i0rst",
+			      "i1rst", "rx0rst", "rx1rst", "isp0rst",
+			      "pclk_vepurst";
+		rockchip,grf = <&grf>;
+		status = "disabled";
+
+		ports {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			vicap_dvp: port@0 {
+				reg = <0>;
+				#address-cells = <1>;
+				#size-cells = <0>;
+			};
+
+			vicap_mipi0: port@1 {
+				reg = <1>;
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				vicap_mipi0_input: endpoint {
+					remote-endpoint = <&csi0_out>;
+				};
+			};
+
+			vicap_mipi1: port@2 {
+				reg = <2>;
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				vicap_mipi1_input: endpoint {
+					remote-endpoint = <&csi1_out>;
+				};
+			};
+		};
+	};
+
 	csi0: csi@ffa20000 {
 		compatible = "rockchip,rv1106-mipi-csi";
 		reg = <0xffa20000 0x10000>;
