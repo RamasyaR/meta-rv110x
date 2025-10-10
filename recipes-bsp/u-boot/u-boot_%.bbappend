@@ -15,6 +15,6 @@ SRC_URI += " \
     file://luckfox-pico-mini-b-rv1103g_defconfig;subdir=git/configs/ \
 "
 
-SRC_URI:append:luckfox-pico-mini-b = " \
+SRC_URI:append:rv-ubifs = " \
     file://0003-add-rv1106-legacy-distro-boot-env.patch \
 " 
